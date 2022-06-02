@@ -1,0 +1,48 @@
+import tensorflow as tf
+import tensorflow_hub as hub
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPool2D, Flatten
+from tensorflow.keras.losses import categorical_crossentropy
+from tensorflow.keras.optimizers import Adam
+import datetime
+
+
+def create_model(model_url, num_classes=10):
+  """
+  Takse a tensorFlow Hub URL and create a Keras Sequential model with it 
+
+  ARGS:
+    model_url (str): A tensoflow hub feature extraction URL
+    num_classes (int): Number of output neurons in the output layer
+      Should be equal to the number of output classes, defautl 10
+
+  Returns:
+    An uncompiled Keras Sequntial model with model_url as features extractor
+    Lyer and dense output layer with num_classes output neurons.
+  """
+
+  # Download the pretrained model and save it as a keras layer
+
+  feature_extractor_layer = hub.KerasLayer(handle=model_url, trainable=False, name='feature_extraction_layer', input_shape=IMAGE_SHAPE+(3,)) # freeze the already learned patterns
+
+  # Create our model
+
+  model = Sequential([
+                      feature_extractor_layer
+                      , Dense(num_classes,activation='softmax', name='output_layer')
+  ])
+
+  return model
+  
+
+
+def create_tensorboard_callback(dir_name, experiment_name):
+  log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+  tensorboard_callback = tf.keras.callbacks.TensorBoard(
+      log_dir=log_dir
+  )
+  print(f"Saving TensorBoard log files to: {log_dir}")
+  return tensorboard_callback
+  
+  def plot_history(history):
+  pd.DataFrame(history.history).plot(figsize=(14,10));
