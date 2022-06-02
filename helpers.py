@@ -5,6 +5,7 @@ from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPool2D, Flatten
 from tensorflow.keras.losses import categorical_crossentropy
 from tensorflow.keras.optimizers import Adam
 import datetime
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 def create_model(model_url, num_classes=10):
@@ -35,7 +36,6 @@ def create_model(model_url, num_classes=10):
   return model
   
 
-
 def create_tensorboard_callback(dir_name, experiment_name):
   log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
   tensorboard_callback = tf.keras.callbacks.TensorBoard(
@@ -46,3 +46,12 @@ def create_tensorboard_callback(dir_name, experiment_name):
   
   def plot_history(history):
   pd.DataFrame(history.history).plot(figsize=(14,10));
+
+def classification_result(y_true, y_pred):
+
+  print(classification_report(y_true, y_pred))
+
+  plt.figure(figsize=(8,8), dpi=80)
+  sns.heatmap(confusion_matrix(y_true, y_pred)/y_true.shape[0], annot=True)
+  plt.ylabel('True Values')
+  plt.xlabel('Predicted Values');
