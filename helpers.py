@@ -6,6 +6,9 @@ from tensorflow.keras.losses import categorical_crossentropy
 from tensorflow.keras.optimizers import Adam
 import datetime
 from sklearn.metrics import classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import os
 
 
 def create_model(model_url, num_classes=10):
@@ -55,3 +58,14 @@ def classification_result(y_true, y_pred):
   sns.heatmap(confusion_matrix(y_true, y_pred)/y_true.shape[0], annot=True)
   plt.ylabel('True Values')
   plt.xlabel('Predicted Values');
+  
+  
+def rand_img_from_dir(target_dir):
+  img_name = np.random.choice( os.listdir(target_dir))
+
+  img = mpimg.imread(target_dir+img_name)
+
+  plt.figure(dpi=150)
+  plt.imshow(img)
+  plt.axis(False);
+
