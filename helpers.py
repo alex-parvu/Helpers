@@ -50,12 +50,11 @@ def create_tensorboard_callback(dir_name, experiment_name):
   def plot_history(history):
   pd.DataFrame(history.history).plot(figsize=(14,10));
 
-def classification_result(y_true, y_pred):
-
-  print(classification_report(y_true, y_pred))
-
-  plt.figure(figsize=(8,8), dpi=80)
-  sns.heatmap(confusion_matrix(y_true, y_pred)/y_true.shape[0], annot=True)
+  
+def classification_results(y_true, y_pred, figsize=(10,10), dpi=100, normalize = 'true'):
+  print(classification_report(y_true=y_true, y_pred=y_pred))
+  plt.figure(figsize=figsize, dpi=dpi)
+  sns.heatmap(confusion_matrix(y_true=y_true, y_pred=y_pred,  normalize=normalize), annot=True)
   plt.ylabel('True Values')
   plt.xlabel('Predicted Values');
   
