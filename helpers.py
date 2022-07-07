@@ -67,4 +67,3 @@ def rand_img_from_dir(target_dir):
   plt.figure(dpi=150)
   plt.imshow(img)
   plt.axis(False);
-
