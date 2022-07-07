@@ -47,7 +47,7 @@ def create_tensorboard_callback(dir_name, experiment_name):
   print(f"Saving TensorBoard log files to: {log_dir}")
   return tensorboard_callback
   
-  def plot_history(history):
+def plot_history(history):
   pd.DataFrame(history.history).plot(figsize=(14,10));
 
   
