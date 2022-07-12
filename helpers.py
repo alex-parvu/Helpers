@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import os
 import seaborn as sns
+import numpy as np
 
 
 def create_model(model_url, num_classes=10):
@@ -68,3 +69,23 @@ def rand_img_from_dir(target_dir):
   plt.figure(dpi=150)
   plt.imshow(img)
   plt.axis(False);
+  
+  
+def percentile_hist(data, percentile, figsize=(12,10), dpi=75, bins=25):
+  """
+  A function to calculate and plot the value underneeth the provided percentile
+
+  Args:
+    data      : the data to be ploted and used for calculations
+    percentile: the value of the percentile to be used for the calculations
+    figisize  : the size to be used in the plot, default is (12,10)
+    dpi       : the dpi value to be used in the plot
+    bins      : the number of bins to be used in the plot
+  """
+
+  output_seq_len = int(np.percentile(data, percentile))
+  print(f"The value that contains the {percentile} percentile value is {output_seq_len}\n")
+  import matplotlib.pyplot as plt
+  plt.figure(figsize=figsize, dpi=dpi)
+  plt.hist(data, bins=bins)
+  plt.axvline(output_seq_len,c='red');
