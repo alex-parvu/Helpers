@@ -89,3 +89,35 @@ def percentile_hist(data, percentile, figsize=(12,10), dpi=75, bins=25):
   plt.figure(figsize=figsize, dpi=dpi)
   plt.hist(data, bins=bins)
   plt.axvline(output_seq_len,c='red');
+
+ 
+
+def plot_time_series(timestamp
+                     , values
+                     , start=0
+                     , end=None
+                     , label=None
+                     , figsize = (12,10)
+                     , dpi = 100
+                     , color='blue'):
+  
+  """
+  Plots a series of points in time (a series of points in time) agains values (a series of values across time)
+  Paramaters:
+    timesteps : an array of timestamps
+    values    : an array of values
+    start     : at which point in time to start
+    end       : at which point in time to stop
+    label     : the name of the plot
+    figsize   : size of the plot
+    dpi       : the dots per inch of the plot
+  """
+   # Plot Series
+  if end is None:
+    end = len(values)
+
+  timestamp = timestamp[start:end]
+  values = values[start:end]
+
+  plt.figure(figsize=figsize, dpi=dpi)
+  sns.lineplot(x=timestamp, y =values, color=color, label=label);
