@@ -11,6 +11,7 @@ import matplotlib.image as mpimg
 import os
 import seaborn as sns
 import numpy as np
+import pandas as pd
 
 
 def create_model(model_url, num_classes=10):
