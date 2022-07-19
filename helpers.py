@@ -121,3 +121,23 @@ def plot_time_series(timestamp
 
   plt.figure(figsize=figsize, dpi=dpi)
   sns.lineplot(x=timestamp, y =values, color=color, label=label);
+
+
+
+def read_bad_json(filename, bad_expresions = [ 'ObjectId(', 'ISODate(', ')']):
+  """
+  A function for reading baddly formated json files  into a pandas Data Frame
+  Arguments:
+    filename        : the name of the file or the path to the file that is to be read, need not be a json but is should have a json structure inside.
+    bad_expresions  : the expresions that need to be replaced with a '' in order for the file to be converted into a DataFrame
+                      by default these expresions are  ['ObjectId(', 'ISODate(', ')'] (expresions found in MongoDb jsons) but any can be added.
+  """
+  with open(filename, mode='r', buffering=8092) as f:
+    data_list = f.read()
+
+  for bad_expresion in bad_expresions:
+    data_list = data_list.replace(bad_expresion, '')
+
+  data_list = pd.read_json(data_list)
+  data_list = data_list.iloc[:,0].to_list()
+  return pd.DataFrame(data_list)
