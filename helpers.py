@@ -125,20 +125,38 @@ def plot_time_series(timestamp
 
 
 
-def read_bad_json(filename, bad_expresions = [ 'ObjectId(', 'ISODate(', ')']):
+def plot_time_series(timestamp
+                     , values
+                     , start=0
+                     , end=None
+                     , label=None
+                     , figsize = (12,10)
+                     , dpi = 100
+                     , use_figure = True
+                     , color='blue'):
+  
   """
-  A function for reading baddly formated json files  into a pandas Data Frame
-  Arguments:
-    filename        : the name of the file or the path to the file that is to be read, need not be a json but is should have a json structure inside.
-    bad_expresions  : the expresions that need to be replaced with a '' in order for the file to be converted into a DataFrame
-                      by default these expresions are  ['ObjectId(', 'ISODate(', ')'] (expresions found in MongoDb jsons) but any can be added.
+  Plots a series of points in time (a series of points in time) agains values (a series of values across time)
+  Paramaters:
+    timesteps : an array of timestamps
+    values    : an array of values
+    start     : at which point in time to start
+    end       : at which point in time to stop
+    label     : the name of the plot
+    figsize   : size of the plot
+    dpi       : the dots per inch of the plot
+    use_figure: if set to False it allows the plot to be overlayed over a previou plot, default is true thus 
+                each calling of this function shall generate another separate plot
+    color     : color of the line plot to be used.
   """
-  with open(filename, mode='r', buffering=8092) as f:
-    data_list = f.read()
+   # Plot Series
+  if end is None:
+    end = len(values)
 
-  for bad_expresion in bad_expresions:
-    data_list = data_list.replace(bad_expresion, '')
-
-  data_list = pd.read_json(data_list)
-  data_list = data_list.iloc[:,0].to_list()
-  return pd.DataFrame(data_list)
+  timestamp = timestamp[start:end]
+  values = values[start:end]
+  
+  if use_figure:
+    plt.figure(figsize=figsize, dpi=dpi)
+  
+  sns.lineplot(x=timestamp, y =values, color=color, label=label)
