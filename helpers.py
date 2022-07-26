@@ -160,3 +160,55 @@ def plot_time_series(timestamp
     plt.figure(figsize=figsize, dpi=dpi)
   
   sns.lineplot(x=timestamp, y =values, color=color, label=label)
+
+ def regression_results(y_true, y_pred, figsize=(12,10), dpi=100, alpha=0.5, scaler=None, return_values=True):
+    """
+    This is a function that provides a detailed result between the predicted values and the actual value following the predictions of a regression algorithm
+    The function prints out the Root Mean Scaled Error and the Scaled Root Mean Squared Error of of the provided values, as well as plotting the values over an ideal
+    case of y_true always being equal to y_pred.
+    The function also returns the rmse and srmse in order to be storeed if required.
+    
+    Paramaters:
+    y_true        : the true values from the test set
+    y_pred        : the predicted values according to the model
+    figsize       : the size of the figure to be plotet
+    dpi           : the detail level of the plot to be used
+    alpha         : the alpha scale to be used on the dots of the plot
+    scaler        : an sklearn scaler model that has been fitted to a set of data having a shape of (n,1)
+    return_values : default value as True, if set to False no values are returned, they are only printed out.
+    """
+    
+
+    plt.figure(figsize=figsize, dpi=dpi) # Set up figure size and detail
+    sns.lineplot(x=y_true, y=y_true, color='green') # Set up ideal case where y_true is always equal to y_pred
+    sns.scatterplot(x=y_true, y=y_pred, color='blue', alpha = alpha) # Show the actual case in comparison to the ideal one
+    plt.xlabel('True Values')
+    plt.ylabel('Predicted Values');
+
+    rmse = np.sqrt( mean_squared_error(y_true=y_true, y_pred=y_pred))
+
+    print(f'Root Mean Squared Error: {rmse}')
+    
+    # The predicted and actual values might be in a one dimensional shape. The scaler expects a two dimensional object
+    # Thus we shall reshape the true and predicted values to be two dimensional. 
+    true_shape = y_true.shape[0] 
+    pred_shape = y_pred.shape[0]
+
+    y_true = y_true.reshape(true_shape,-1)
+    y_pred = y_pred.reshape(pred_shape,-1)
+    
+    
+    if scaler is None: # If no scaler is provided then a standard MinMax Scaler shall be used and fitted to the true values
+        scaler = MinMaxScaler()
+
+        y_true = scaler.fit_transform(y_true)
+        y_pred = scaler.transform(y_pred)
+    else: # If a scaler is provided then the true and predicted values shall be scalled according to provided scaler.
+        y_true = scaler.transform(y_true)
+        y_pred = scaler.transform(y_pred)
+        
+    srmse = np.sqrt(mean_squared_error(y_true=y_true, y_pred=y_pred))
+
+    print(f'Scaled Root Mean Squared Error: {srmse}')
+    if return_values: # Only returns the metric values if return_values is stated as True
+        return rmse, srmse
