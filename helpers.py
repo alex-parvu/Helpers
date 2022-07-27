@@ -161,7 +161,7 @@ def plot_time_series(timestamp
   
   sns.lineplot(x=timestamp, y =values, color=color, label=label)
 
- def regression_results(y_true, y_pred, figsize=(12,10), dpi=100, alpha=0.5, scaler=None, return_values=True):
+def regression_results(y_true, y_pred, figsize=(12,10), dpi=100, alpha=0.5, scaler=None, return_values=True):
     """
     This is a function that provides a detailed result between the predicted values and the actual value following the predictions of a regression algorithm
     The function prints out the Root Mean Scaled Error and the Scaled Root Mean Squared Error of of the provided values, as well as plotting the values over an ideal
