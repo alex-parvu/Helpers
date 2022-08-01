@@ -6,13 +6,14 @@ from tensorflow.keras.losses import categorical_crossentropy
 from tensorflow.keras.optimizers import Adam
 import datetime
 from sklearn.metrics import classification_report, confusion_matrix
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 import os
-import seaborn as sns
 import numpy as np
 import pandas as pd
-
+import seaborn as sns
+from sklearn.metrics import mean_squared_error
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
 
 def create_model(model_url, num_classes=10):
   """
