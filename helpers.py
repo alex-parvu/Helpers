@@ -179,6 +179,8 @@ def regression_results(y_true, y_pred, figsize=(12,10), dpi=100, alpha=0.5, scal
     return_values : default value as True, if set to False no values are returned, they are only printed out.
     """
     
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
 
     plt.figure(figsize=figsize, dpi=dpi) # Set up figure size and detail
     sns.lineplot(x=y_true, y=y_true, color='green') # Set up ideal case where y_true is always equal to y_pred
@@ -192,6 +194,7 @@ def regression_results(y_true, y_pred, figsize=(12,10), dpi=100, alpha=0.5, scal
     
     # The predicted and actual values might be in a one dimensional shape. The scaler expects a two dimensional object
     # Thus we shall reshape the true and predicted values to be two dimensional. 
+    
     true_shape = y_true.shape[0] 
     pred_shape = y_pred.shape[0]
 
