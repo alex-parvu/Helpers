@@ -216,3 +216,25 @@ def regression_results(y_true, y_pred, figsize=(12,10), dpi=100, alpha=0.5, scal
     print(f'Scaled Root Mean Squared Error: {srmse}')
     if return_values: # Only returns the metric values if return_values is stated as True
         return rmse, srmse
+
+def plot_precission_vs_recall(precision,recall,thresholds):
+    """
+    A function that plots the precision vs recall taking into account the thresolds used
+    The expected inputs are the outpus from sklearn.metrics.precision_recall_curve
+    Outputs from other resources can be passed but the function expects the precission and recall arrays to have a dimension of n+1 when compared to ne n dimensional thresolds array
+    
+    Parameters:
+    precision  : an array of precission values for each subsecquent threashold
+    recall     : an array recall values given each subsequent threshold
+    thresholds : an arrat of thresholds
+    
+    """
+    plt.figure(figsize=(12,8), dpi = 100)
+    plt.plot(thresholds, precision[:-1], '--', label='Precision', c='blue')
+    plt.plot(thresholds, recall[:-1], 'g-', label='Recall')
+    equilibrian = thresholds[ precision[:-1] ==  recall[:-1]]
+    plt.axvline(equilibrian, c='black')
+    plt.legend();
+
+    print(f'Precission and Recall are equal at a threshold of {equilibrian}')
+
