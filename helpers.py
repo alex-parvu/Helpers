@@ -238,3 +238,44 @@ def plot_precission_vs_recall(precision,recall,thresholds):
 
     print(f'Precission and Recall are equal at a threshold of {equilibrian}')
 
+
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import train_test_split
+
+def plot_learning_curves(model, X, y, random_state=None, figsize=(12,10), dpi=100):
+    """
+    A function used to plot the train and validation loss values for an sklearn model. The function assumes that the model is a regression.
+    
+    Parameters:
+    
+    model        : an sklearn model 
+    X            : the independent variables that can be used to train the provided sklearn model 
+    y            : the dependent variable/variables that can be used to train the model
+    random_state : the random state to be used in the calculations
+    figsize      : the size of the figure that is going to get ploted
+    dpi          : the dots per inch value that is going to be used by the ploting function
+    
+    
+    Ouput:
+        A plot that is going to represent the learning rate for the train and the validation sets.
+    """
+    
+    
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=random_state)
+    
+    train_error, val_error = [],[]
+    
+    for m in range(1, len(X_train)):
+        
+        model.fit(X_train[:m], y_train[:m])
+        
+        y_train_preds = model.predict(X_train[:m])
+        y_val_preds = model.predict(X_val)
+        
+        train_error.append( mean_squared_error(y_train[:m], y_train_preds) )
+        val_error.append( mean_squared_error(y_val_preds, y_val) )
+        
+    plt.figure(figsize=figsize, dpi=dpi)
+    plt.plot( np.sqrt(train_error), 'r--', linewidth=1, label='train' )
+    plt.plot( np.sqrt(val_error), 'b-', linewidth=2, label='val' )
+    plt.legend();
