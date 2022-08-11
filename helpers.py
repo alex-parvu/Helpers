@@ -281,7 +281,7 @@ def plot_learning_curves(model, X, y, random_state=None, figsize=(12,10), dpi=10
     plt.legend();
 
 
-def background_classification(estimator, X, y, figsize=(10,10), dpi=100):
+def background_classification(estimator, X, y, figsize=(10,10), dpi=100, title=None):
     """
     This is a function that plots the predict space of an sklearn classification estimator behind the actual points and their classification.
     Parameters:
@@ -293,6 +293,7 @@ def background_classification(estimator, X, y, figsize=(10,10), dpi=100):
     NOTE        : the X and y parameters n value must be the same for both arrays
     figsie      : the size of the plot that is to be displayed, default (10,10)
     dpi         : the dpi value to be used on the displayed plot, default 100
+    title       : the title that is to be given to the plot
     """
 
     from concurrent.futures import ThreadPoolExecutor
@@ -313,3 +314,4 @@ def background_classification(estimator, X, y, figsize=(10,10), dpi=100):
     plt.figure(figsize=figsize, dpi=dpi)
     sns.scatterplot(x=predict_space[:,0], y=predict_space[:,1], hue=predict_space[:,2], alpha=0.1, legend=False)
     sns.scatterplot(x=X[:,0], y=X[:,1], hue=y)
+    plt.title(title);
