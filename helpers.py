@@ -279,3 +279,37 @@ def plot_learning_curves(model, X, y, random_state=None, figsize=(12,10), dpi=10
     plt.plot( np.sqrt(train_error), 'r--', linewidth=1, label='train' )
     plt.plot( np.sqrt(val_error), 'b-', linewidth=2, label='val' )
     plt.legend();
+
+
+def background_classification(estimator, X, y, figsize=(10,10), dpi=100):
+    """
+    This is a function that plots the predict space of an sklearn classification estimator behind the actual points and their classification.
+    Parameters:
+    estimator   : a fitted sklearn classification estimator
+    X           : a numpy array containing the two independent variables that were used to fit the system or the two independent variables of the test set
+                : the array is assumed to be of the shape (n,2) where n can take any value
+    y           : the labels used for the training of the classification estimator or the labels of the test set.
+                : the array it is assumed to be of shape (n,) where n can take any value
+    NOTE        : the X and y parameters n value must be the same for both arrays
+    figsie      : the size of the plot that is to be displayed, default (10,10)
+    dpi         : the dpi value to be used on the displayed plot, default 100
+    """
+
+    from concurrent.futures import ThreadPoolExecutor
+
+    x_min, x_max = X[:,0].min()-0.2, X[:,0].max()+0.2
+    y_min, y_max = X[:,1].min()-0.2, X[:,1].max()+0.2
+
+    x_axis = np.arange(x_min, x_max, 0.01)
+    y_axis = np.arange(y_min, y_max, 0.01)
+
+    predict_space = []
+    for x in x_axis:
+        with ThreadPoolExecutor() as executor:
+            [ executor.submit(predict_space.append, [x,y, estimator.predict([[x,y]])[0] ]   ) for y in  y_axis ]
+
+
+    predict_space = np.array(predict_space)        
+    plt.figure(figsize=figsize, dpi=dpi)
+    sns.scatterplot(x=predict_space[:,0], y=predict_space[:,1], hue=predict_space[:,2], alpha=0.1, legend=False)
+    sns.scatterplot(x=X[:,0], y=X[:,1], hue=y)
