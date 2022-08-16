@@ -281,7 +281,7 @@ def plot_learning_curves(model, X, y, random_state=None, figsize=(12,10), dpi=10
     plt.legend();
 
 
-def background_classification(estimator, X, y, figsize=(10,10), dpi=100, title=None):
+def background_classification(estimator, X, y, figsize=(10,10), dpi=100, title=None, step = 0.01, s = 50):
     """
     This is a function that plots the predict space of an sklearn classification estimator behind the actual points and their classification.
     Parameters:
@@ -294,6 +294,8 @@ def background_classification(estimator, X, y, figsize=(10,10), dpi=100, title=N
     figsie      : the size of the plot that is to be displayed, default (10,10)
     dpi         : the dpi value to be used on the displayed plot, default 100
     title       : the title that is to be given to the plot
+    step        : a parameter that determins how tight the x_axis and y_axis background points are going to be grouped
+    s           : a parameter that determins how large the x_axis and y_axis background points are going to be
     """
 
     from concurrent.futures import ThreadPoolExecutor
@@ -301,8 +303,8 @@ def background_classification(estimator, X, y, figsize=(10,10), dpi=100, title=N
     x_min, x_max = X[:,0].min()-0.2, X[:,0].max()+0.2
     y_min, y_max = X[:,1].min()-0.2, X[:,1].max()+0.2
 
-    x_axis = np.arange(x_min, x_max, 0.01)
-    y_axis = np.arange(y_min, y_max, 0.01)
+    x_axis = np.arange(x_min, x_max, step)
+    y_axis = np.arange(y_min, y_max, step)
 
     predict_space = []
     for x in x_axis:
@@ -312,6 +314,6 @@ def background_classification(estimator, X, y, figsize=(10,10), dpi=100, title=N
 
     predict_space = np.array(predict_space)        
     plt.figure(figsize=figsize, dpi=dpi)
-    sns.scatterplot(x=predict_space[:,0], y=predict_space[:,1], hue=predict_space[:,2], alpha=0.1, legend=False)
+    sns.scatterplot(x=predict_space[:,0], y=predict_space[:,1], hue=predict_space[:,2], alpha=0.1, legend=False, s=s)
     sns.scatterplot(x=X[:,0], y=X[:,1], hue=y)
     plt.title(title);
