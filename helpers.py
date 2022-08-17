@@ -317,3 +317,22 @@ def background_classification(estimator, X, y, figsize=(10,10), dpi=100, title=N
     sns.scatterplot(x=predict_space[:,0], y=predict_space[:,1], hue=predict_space[:,2], alpha=0.1, legend=False, s=s)
     sns.scatterplot(x=X[:,0], y=X[:,1], hue=y)
     plt.title(title);
+    
+  
+def read_bad_json(filename, bad_expresions = [ 'ObjectId(', 'ISODate(', ')']):
+  """
+  A function for reading baddly formated json files  into a pandas Data Frame
+  Arguments:
+    filename        : the name of the file or the path to the file that is to be read, need not be a json but is should have a json structure inside.
+    bad_expresions  : the expresions that need to be replaced with a '' in order for the file to be converted into a DataFrame
+                      by default these expresions are  ['ObjectId(', 'ISODate(', ')'] (expresions found in MongoDb jsons) but any can be added.
+  """
+  with open(filename, mode='r', buffering=8092) as f:
+    data_list = f.read()
+
+  for bad_expresion in bad_expresions:
+    data_list = data_list.replace(bad_expresion, '')
+
+  data_list = pd.read_json(data_list)
+  data_list = data_list.iloc[:,0].to_list()
+  return pd.DataFrame(data_list)
