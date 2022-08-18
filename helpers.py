@@ -336,3 +336,51 @@ def read_bad_json(filename, bad_expresions = [ 'ObjectId(', 'ISODate(', ')']):
   data_list = pd.read_json(data_list)
   data_list = data_list.iloc[:,0].to_list()
   return pd.DataFrame(data_list)
+
+def opt_cluster(estimator, data, cluster_range = np.arange(2,15), figsize=(14,5), dpi=100):
+    """
+    
+    This is a function that allowes you to detect what would be the optimal number of clusters for a given datasets
+    
+    Parameters:
+    
+    estimator     : an sklearn cluster estimator from sklearn.cluster, the function assumes that the estimator has the n_clusters parameter and
+                    has the .inertia_ and .labels_
+    data          : the data that is to be fited to the provided estimator
+    cluster_range : a range of ints that are to be used to generate clusters to investigate to optimal number of clusters
+    figsize       : the size of the plots that are to be displayed
+    dpi           : the dpi value to be used in the plots
+    
+    Ouput:
+    
+    This function shall plot two graphs one is the K clusters vs the inertia data and one is the K clusters vs Silhouette Data \n
+    
+    """
+
+    inertia_data = []
+    for k in cluster_range:
+        cluster_generator = estimator(n_clusters=k).fit(X)
+        inertia_data.append( (k, cluster_generator.inertia_) )
+
+    inertia_data = np.array(inertia_data)
+
+    sil_score = []
+    for k in cluster_range:
+        cluster_generator = estimator(n_clusters=k).fit(X)
+        sil_score.append( (k, silhouette_score(X=X, labels=cluster_generator.labels_)) )
+
+    sil_score = np.array(sil_score)
+
+    fig, axes = plt.subplots(ncols=2, figsize=figsize, dpi=dpi)
+    
+    axes[0].set_title('Inertia Data')
+    axes[0].set_xlabel('K')
+    axes[0].set_ylabel('Inertia')
+    axes[0].plot(inertia_data[:,0], inertia_data[:,1])
+
+    axes[1].set_title('Silhouette Data')
+    axes[1].set_xlabel('K')
+    axes[1].set_ylabel('Silhouette Score')
+    axes[1].plot(sil_score[:,0], sil_score[:,1])
+    
+    plt.tight_layout();
