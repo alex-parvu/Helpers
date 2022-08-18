@@ -384,3 +384,38 @@ def opt_cluster(estimator, data, cluster_range = np.arange(2,15), figsize=(14,5)
     axes[1].plot(sil_score[:,0], sil_score[:,1])
     
     plt.tight_layout();
+
+def img_segmentation(image, n_color_chanels, figsize=(12,10), dpi=100, plot_image = True, return_new_image = False):
+    """
+    This is a function that takes an image and segments it by n colors
+    
+    Parameters:
+    image            : an image file of shape (m,n,3)
+    n_color_chanels  : the number of color chanels to be used when plottig the image
+    figize           : the size of the image to be ploted
+    dpi              : the dpi to be used in the ploted image
+    plot_image       : default value is True, change it to False if you don't want to plot the image
+    return_new_image : default value is False, change it to True if you want the function to return the image
+    
+    
+    Output:
+    
+    The function shall reduce the numbers of colors in the image o the number of chanels provdide. These shall be the cluster centers from a 
+    KMeans clustering algorithm. Once the clusters are computed each pixel shall be replaced with their cluster's center values and the image
+    shall be ploted
+    """
+    from sklearn.cluster import KMeans
+    
+    shape = image.shape
+    X = image.reshape(-1,3)
+    
+    kmeans = KMeans(n_clusters=n_color_chanels).fit(X)
+    segmented_image = kmeans.cluster_centers_[kmeans.labels_]
+    segmented_image= segmented_image.reshape(shape)
+    if plot_image:
+        plt.figure(figsize=figsize, dpi=dpi)
+        plt.imshow(segmented_image/255)
+        plt.axis(False);
+
+    if return_new_image:
+        return segmented_image/255
