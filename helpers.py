@@ -179,8 +179,8 @@ def regression_results(y_true, y_pred, figsize=(12,10), dpi=100, alpha=0.5, scal
     return_values : default value as True, if set to False no values are returned, they are only printed out.
     """
     
-    y_true = np.array(y_true)
-    y_pred = np.array(y_pred)
+    y_true = np.array(y_true).reshape(-1,)
+    y_pred = np.array(y_pred).reshape(-1,)
 
     plt.figure(figsize=figsize, dpi=dpi) # Set up figure size and detail
     sns.lineplot(x=y_true, y=y_true, color='green') # Set up ideal case where y_true is always equal to y_pred
