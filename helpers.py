@@ -419,3 +419,18 @@ def img_segmentation(image, n_color_chanels, figsize=(12,10), dpi=100, plot_imag
 
     if return_new_image:
         return segmented_image/255
+
+
+def show_lemmas(doc):
+    """
+    A function that prints out on each line the text of the token the pos_ the lemma hash and the lemma_
+    
+    Prameters:
+    doc : a spacey document that is generaly created by passing some text to the a nlp object created as follows nlp = spacy.load('en_core_web_sm')
+    
+    Output:
+    for each token prints out the following
+    {token.text:{12}} {token.pos_:{8}} {token.lemma:<{22}} {token.lemma_}
+    """
+    for token in doc:
+        print(f'{token.text:{12}} {token.pos_:{8}} {token.lemma:<{22}} {token.lemma_}')
