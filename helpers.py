@@ -434,3 +434,42 @@ def show_lemmas(doc):
     """
     for token in doc:
         print(f'{token.text:{12}} {token.pos_:{8}} {token.lemma:<{22}} {token.lemma_}')
+
+def balance_train_set(X, y, sample_size=100, resampling=10):
+    """
+    This is a function with the purpose of balancing out a train set that has an unbalanced label.
+    The method by which it achieves that is by sampling an equal amount of observations for each label (with replacement), for a given amount of times(resampling)
+    
+    Parameters:
+    X           : The X values (independent values), of a training set as a pandas Data Frame or a numpy array, it can have as many features as posible
+    y           : The y values (dependent values), of a training set in the form of a single colum pandas Data Frame or a pandas series or a numpy array
+    sample_size : An integer (default value = 100, but the value should be smaller than the maximum number of observations of the least represented class), signifies the number
+                of values that each sample shall contain from each class.
+    resampleing : An integer (can not be 0), representing the number of samples that shall be taken for each individual class, can be as high as needed.
+    
+    Output:
+    This function outputs an X and y where the classes are equily balanced, with the number of observations beeing equaled to sample_size * resampleing * [number of classes]
+    """
+    X = pd.DataFrame(X)
+    if type(y) == pd.core.frame.DataFrame:
+        y = pd.Series(y.values.reshape(-1))
+    elif type(y) == np.ndarray:
+        y = pd.Series(y.reshape(-1))
+    else:
+        y = pd.Series(y)
+    
+    unique_values = y.unique()
+
+    Xs = []
+    ys = []
+
+    for sample in range(resampleing):
+        for value in unique_values:
+            Xs.append(X[y==value].sample(sample_size))
+            ys = ys + [value]*sample_size
+
+    Xs = pd.concat(Xs)
+    Xs['ys'] = ys
+    Xs = Xs.sample(frac=1)
+    
+    return Xs.drop('ys',axis=1), Xs.ys
