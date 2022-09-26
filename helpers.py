@@ -463,7 +463,7 @@ def balance_train_set(X, y, sample_size=100, resampling=10):
     Xs = []
     ys = []
 
-    for sample in range(resampleing):
+    for sample in range(resampling):
         for value in unique_values:
             Xs.append(X[y==value].sample(sample_size))
             ys = ys + [value]*sample_size
