@@ -489,3 +489,21 @@ def drop_low_info(data, percent=0.5):
     nul_perc = data.isnull().sum()/data.shape[0]
     columns = nul_perc[nul_perc <percent].index
     return data[columns]
+
+def show_low_info(data, percent=None ):
+    """
+    The purpose of this function is to visualize the percen of missing values withing each column of a Pandas Data Frame
+    
+    Parameters:
+    data    : a Pandas Data frame
+    percent : an optional parameter in the range of (0, 1], if stated then a verticcal line shall be drawn at the stated limit. 
+    
+    Output:
+    A plot visualizing the percentage of missing values in each column, sorted from highest percent to lowest percent.
+    """
+    plt.figure(figsize=(10,12),dpi=100)
+    nul_perc = (data.isnull().sum()/data.shape[0]).sort_values(ascending=True)
+    plt.barh(y=nul_perc.index, width=nul_perc.values)
+    if percent:
+        plt.axvline(percent,c='red')
+    ;
