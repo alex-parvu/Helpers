@@ -492,7 +492,7 @@ def show_low_info(data, percent=None ):
     plt.barh(y=nul_perc.index, width=nul_perc.values)
     if percent:
         plt.axvline(percent,c='red')
-    ;
+        
 
 def drop_low_info(data, percent=0.5, sli=False):
     """
@@ -510,5 +510,5 @@ def drop_low_info(data, percent=0.5, sli=False):
     columns = nul_perc[nul_perc <percent].index
     
     if sli:
-        show_low_info(data=data, percent=percent)
+        show_low_info(data=data, percent=percent);
     return data[columns]
