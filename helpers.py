@@ -473,3 +473,19 @@ def balance_train_set(X, y, sample_size=100, resampling=10):
     Xs = Xs.sample(frac=1)
     
     return Xs.drop('ys',axis=1), Xs.ys
+
+ 
+def drop_low_info(data, percent=0.5):
+    """
+    The purpose of this function is to drop low information columns from a Pandas data frame.
+    
+    Parameters:
+    data    : A pandas data Frame 
+    percent : An int in the range of (0,1], denoting the percentage of nulls that need to be present in order to remove a column from the data
+    
+    Output:
+    A Pandas Data Frame that only contains column whose, percent of nulls is lower than the percent parameter provided
+    """
+    nul_perc = data.isnull().sum()/data.shape[0]
+    columns = nul_perc[nul_perc <percent].index
+    return data[columns]
