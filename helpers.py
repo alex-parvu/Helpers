@@ -1,9 +1,3 @@
-import tensorflow as tf
-import tensorflow_hub as hub
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPool2D, Flatten
-from tensorflow.keras.losses import categorical_crossentropy
-from tensorflow.keras.optimizers import Adam
 import datetime
 from sklearn.metrics import classification_report, confusion_matrix
 import os
@@ -28,6 +22,13 @@ def create_model(model_url, num_classes=10):
     An uncompiled Keras Sequntial model with model_url as features extractor
     Lyer and dense output layer with num_classes output neurons.
   """
+  
+  import tensorflow as tf
+  import tensorflow_hub as hub
+  from tensorflow.keras.models import Sequential
+  from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPool2D, Flatten
+  from tensorflow.keras.losses import categorical_crossentropy
+  from tensorflow.keras.optimizers import Adam
 
   # Download the pretrained model and save it as a keras layer
 
@@ -44,6 +45,7 @@ def create_model(model_url, num_classes=10):
   
 
 def create_tensorboard_callback(dir_name, experiment_name):
+  import tensorflow as tf
   log_dir = dir_name + "/" + experiment_name + "/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
   tensorboard_callback = tf.keras.callbacks.TensorBoard(
       log_dir=log_dir
@@ -123,44 +125,6 @@ def plot_time_series(timestamp
 
   plt.figure(figsize=figsize, dpi=dpi)
   sns.lineplot(x=timestamp, y =values, color=color, label=label);
-
-
-
-def plot_time_series(timestamp
-                     , values
-                     , start=0
-                     , end=None
-                     , label=None
-                     , figsize = (12,10)
-                     , dpi = 100
-                     , use_figure = True
-                     , color='blue'):
-  
-  """
-  Plots a series of points in time (a series of points in time) agains values (a series of values across time)
-  Paramaters:
-    timesteps : an array of timestamps
-    values    : an array of values
-    start     : at which point in time to start
-    end       : at which point in time to stop
-    label     : the name of the plot
-    figsize   : size of the plot
-    dpi       : the dots per inch of the plot
-    use_figure: if set to False it allows the plot to be overlayed over a previou plot, default is true thus 
-                each calling of this function shall generate another separate plot
-    color     : color of the line plot to be used.
-  """
-   # Plot Series
-  if end is None:
-    end = len(values)
-
-  timestamp = timestamp[start:end]
-  values = values[start:end]
-  
-  if use_figure:
-    plt.figure(figsize=figsize, dpi=dpi)
-  
-  sns.lineplot(x=timestamp, y =values, color=color, label=label)
 
 def regression_results(y_true, y_pred, figsize=(12,10), dpi=100, alpha=0.5, scaler=None, return_values=True):
     """
