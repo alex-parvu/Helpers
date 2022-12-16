@@ -501,3 +501,35 @@ def get_dummies(data, column, values=None, drop_last = False):
         data[column+'_'+value] = data[column].apply(lambda x: int(x==value))
         
     return data
+
+
+def drop_constants(data, return_constants=False):
+    """
+    A function that takes a pandas data frame as an input and returns a pandas data frame minus the columns that area constants.
+    
+    Inputs:
+    data             : a pandas data frame 
+    return_constants : default value is False, if set to True the function shall also return the constant columns names as a list
+    
+    Outputs;
+    The input data frame minus the constant columns, if return_constants is set to True it would also return the constant columns as a list
+    """
+    
+    constants = []
+    
+    columns = data.columns
+    
+    unique_dic = {}
+    
+    for col in columns:
+        unique_dic[col] = len(data[col].unique())
+    
+    for key in unique_dic.keys():
+        if unique_dic[key] == 1:
+            constants.append(key)
+            data =  data.drop(labels=key, axis=1)
+    
+    if return_constants:
+        return data, constants
+    else:
+        return data
