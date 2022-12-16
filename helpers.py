@@ -476,3 +476,28 @@ def drop_low_info(data, percent=0.5, sli=False):
     if sli:
         show_low_info(data=data, percent=percent);
     return data[columns]
+
+
+def get_dummies(data, column, values=None, drop_last = False):
+    """
+    A function that creates dummy varibles out of a column 
+    Inputs:
+    data      : A pandas data frame
+    column    : The column in the data frame that is to be converted into dummy variables
+    values    : A list or array of valus. If not provided each unique value in the column shall be considered, else only the values in the list shall be considered
+    drop_last : If set to True one value shall be excluded from the list of dummy variables, 
+                it's existance shall be implied by 0s present on all the remaining dummy columns
+    
+    """
+    data[column] = data[column].astype(str)
+
+    if values is None:
+        values = data[column].unique()
+        
+    if drop_last:
+        values = values[:-1]
+
+    for value in values:
+        data[column+'_'+value] = data[column].apply(lambda x: int(x==value))
+        
+    return data
