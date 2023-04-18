@@ -533,3 +533,40 @@ def drop_constants(data, return_constants=False):
         return data, constants
     else:
         return data
+      
+
+def SRMSE(y_true, y_pred, scaler = None):
+    """
+    This is a function with the purpose of establishing the accuracy of a regression via the calculation of a scaled version of the RMSE
+    
+    Inputs:
+    y_true : the actual values
+    y_pred : the predicted values
+    scaler : a fitted scaler object of the type sklearn.preprocessing.MinMaxScaler
+    
+    Output:
+    The root mean squared error of y_true and y_pred, scaled to be between 0 and 1
+    """
+    
+    
+    # Make sure the ys are np arrays 
+    from numpy import array
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
+    
+    # Create the scaler object if it was not provided
+    if scaler is None:
+        from sklearn.preprocessing import MinMaxScaler
+        scaler = MinMaxScaler()
+        scaler.fit(y_true.reshape((-1,1)))
+     
+    # Calculate the RMSE
+    from sklearn.metrics import mean_squared_error
+    from numpy import sqrt
+    
+    mse = mean_squared_error(y_true=y_true, y_pred=y_pred)
+    rmse = sqrt(mse)
+    
+    # Return SRMSE
+    return scaler.transform(rmse.reshape(-1,1))[0][0]
+    
